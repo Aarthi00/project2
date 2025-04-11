@@ -1,0 +1,28 @@
+Creat a Amazon Kinesis Data Analytics Streaming Application
+     - Using Zeppelin Notebook 
+     - Kinesis > Analytics Application > Studio > Create a Studio Notebook
+     - Kinesis > Analytics Application > Studio > Create a Studio Notebook (with Custom settings)
+     - Studio Notebook Name : `ecomm-streaming-app-v1` 
+     - IAM : `Default`
+     - Choose the Source : `ecommerce-raw-user-activity-stream-1`
+     - Choose the Destination : `ecommerce-raw-user-activity-stream-2`
+     - Destination for code in Amazon S3 : `s3://ecommerce-raw-us-east-1-dev`
+ @@ -330,4 +331,4 @@ SELECT count(distinct brand) from "my-db-ecomm"."ecomm_user_activity_parquet";
+         category_code
+   FROM "my-db-ecomm"."ecomm_user_activity_parquet" LIMIT 10;
+s3_resource = boto3.resource('s3', region_name='us-east-1')
+ kinesis_client = boto3.client('kinesis', region_name='us-east-1')
+ 
+ # Kinesis Details 
+ kinesis_stream_name = 'ecommerce-raw-user-activity-stream-1'
+ streaming_partition_key = 'category_id'
+ 
+ @@ -45,7 +46,8 @@ def stream_data_simulator(input_s3_bucket, input_s3_key):
+                                                  PartitionKey=str(json_load[streaming_partition_key]))
+             # response['category_code'] = json_load['category_code']
+             print('HttpStatusCode:', response['ResponseMetadata']['HTTPStatusCode'], ', ', json_load['category_code'])
+ 
+             # print(response)
+             
+             # Adding a temporary pause, for demo-purposes:
+             sleep(0.5)
